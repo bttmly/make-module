@@ -34,4 +34,24 @@ describe("makeModule()", function () {
     assert(typeof result.exports.add === "function");
     assert(typeof result.exports.subtract === "function");
   });
+
+  it("throws as expected", function () {
+    var badCode = "module.exports = {a: 1 b: 1};";
+    var err1;
+    try {
+      makeModule(badCode);
+    } catch (e) {
+      err1 = e;
+    }
+    assert(/unexpected identifier/i.test(err1.message) === true);
+
+    var badRequire = "require('./asdf')";
+    var err2;
+    try {
+      makeModule(badRequire);
+    } catch (e) {
+      err2 = e;
+    }
+    assert(/cannot find module/i.test(err2.message) === true);
+  });
 });
