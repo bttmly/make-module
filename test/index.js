@@ -4,13 +4,22 @@ var assert = require("assert");
 
 var makeModule = require("..");
 
-var code = fs.readFileSync(joinHere("./example/calc.js")).toString();
+
+function returnError (func) {
+  try {
+    func();
+  } catch (err) {
+    return err;
+  }
+}
 
 function joinHere (where) {
   return path.join(__dirname, where);
 }
 
 describe("makeModule()", function () {
+  var code = fs.readFileSync(joinHere("./example/calc.js")).toString();
+
   it("example works as expected normally", function () {
     var calc = require("./example/calc");
     assert(typeof calc.add === "function");
@@ -50,25 +59,15 @@ describe("makeModule()", function () {
     assert(result.hasOwnProperty("loaded"));
     assert(result.hasOwnProperty("children"));
     assert(result.hasOwnProperty("paths"));
-  })
+  });
 
   it("throws as expected", function () {
     var badCode = "module.exports = {a: 1 b: 1};";
-    var err1;
-    try {
-      makeModule(badCode);
-    } catch (e) {
-      err1 = e;
-    }
+    var err1 = returnError(function () { makeModule(badCode); });
     assert(/unexpected identifier/i.test(err1.message) === true);
 
     var badRequire = "require('./asdf')";
-    var err2;
-    try {
-      makeModule(badRequire);
-    } catch (e) {
-      err2 = e;
-    }
+    var err2 = returnError(function () { makeModule(badRequire); });
     assert(/cannot find module/i.test(err2.message) === true);
   });
 });
