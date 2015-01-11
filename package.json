@@ -1,5 +1,5 @@
 {
-  "name": "create-module",
+  "name": "make-module",
   "version": "1.0.0",
   "description": "create a module from a string of code",
   "main": "index.js",
