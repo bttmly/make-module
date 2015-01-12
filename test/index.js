@@ -27,7 +27,7 @@ describe("makeModule()", function () {
   });
 
   it("creates modules from arbitrary code", function () {
-    var code = "module.exports = {works: true};"
+    var code = "module.exports = {works: true};";
     var result = makeModule(code);
     assert(result.exports.works === true);
   });
@@ -39,7 +39,7 @@ describe("makeModule()", function () {
   });
 
   it("joins path to process.cwd() if path not absolute", function () {
-    var result = makeModule(code, "test/example/calc");
+    var result = makeModule(code, "./example/calc");
     assert(typeof result.exports.add === "function");
     assert(typeof result.exports.subtract === "function");
   });
@@ -51,7 +51,7 @@ describe("makeModule()", function () {
   });
 
   it("has the expected properties", function () {
-    var result = makeModule(code, "test/example/calc");
+    var result = makeModule(code, "./example/calc");
     assert(result.hasOwnProperty("exports"));
     assert(result.hasOwnProperty("id"));
     assert(result.hasOwnProperty("parent"));

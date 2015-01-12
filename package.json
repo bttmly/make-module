@@ -2,6 +2,7 @@
   "name": "make-module",
   "version": "1.0.0",
   "description": "create a module from a string of code",
+  "repository": "git@github.com:nickb1080/make-module.git",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -20,5 +21,8 @@
   "devDependencies": {
     "chai": "^1.10.0",
     "mocha": "^2.1.0"
+  },
+  "dependencies": {
+    "callsite": "^1.0.0"
   }
 }
