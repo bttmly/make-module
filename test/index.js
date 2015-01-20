@@ -4,15 +4,6 @@ var assert = require("assert");
 
 var makeModule = require("..");
 
-
-function returnError (func) {
-  try {
-    func();
-  } catch (err) {
-    return err;
-  }
-}
-
 function joinHere (where) {
   return path.join(__dirname, where);
 }
@@ -59,15 +50,36 @@ describe("makeModule()", function () {
     assert(result.hasOwnProperty("loaded"));
     assert(result.hasOwnProperty("children"));
     assert(result.hasOwnProperty("paths"));
+    assert(result.hasOwnProperty("error"));
+    assert(result.error === null);
   });
 
-  it("throws as expected", function () {
+  it("returns an error property with the error object if compile failed", function () {
     var badCode = "module.exports = {a: 1 b: 1};";
-    var err1 = returnError(function () { makeModule(badCode); });
-    assert(/unexpected identifier/i.test(err1.message) === true);
+    var result1 = makeModule(badCode);
+    assert(/unexpected identifier/i.test(result1.error.message) === true);
 
     var badRequire = "require('./asdf')";
-    var err2 = returnError(function () { makeModule(badRequire); });
-    assert(/cannot find module/i.test(err2.message) === true);
+    var result2 = makeModule(badRequire);
+    assert(/cannot find module/i.test(result2.error.message) === true);
+
+    var wontCompile = fs.readFileSync(joinHere("./example/wont-compile.js")).toString();
+    var result3 = makeModule(wontCompile);
+    assert(/cannot set property '66' of undefined/i.test(result3.error.message) === true);
   });
+
+  it("sets .exports to `null` if compile failed", function () {
+    var badCode = "module.exports = {a: 1 b: 1};";
+    var result1 = makeModule(badCode);
+    assert(result1.exports === null);
+
+    var badRequire = "require('./asdf')";
+    var result2 = makeModule(badRequire);
+    assert(result2.exports === null);
+
+    var wontCompile = fs.readFileSync(joinHere("./example/wont-compile.js")).toString();
+    var result3 = makeModule(wontCompile);
+    assert(result3.exports === null);
+  });
+
 });
