@@ -44,12 +44,20 @@ describe("makeModule()", function () {
   it("has the expected properties", function () {
     var result = makeModule(code, "./example/calc");
     assert(result.hasOwnProperty("exports"));
+    
     assert(result.hasOwnProperty("id"));
+    
     assert(result.hasOwnProperty("parent"));
+    
     assert(result.hasOwnProperty("filename"));
+
     assert(result.hasOwnProperty("loaded"));
+    assert(result.loaded === true);
+    
     assert(result.hasOwnProperty("children"));
+    
     assert(result.hasOwnProperty("paths"));
+    
     assert(result.hasOwnProperty("error"));
     assert(result.error === null);
   });
@@ -57,10 +65,10 @@ describe("makeModule()", function () {
   it("strips the BOM if present", function () {
     var BOM = String.fromCharCode(0xFEFF);
     var code = "module.exports = true;";
-    assert(code.length === 22);
     var codeWithBOM = BOM + code;
-    assert(code.length === 23);
-    var result = makeModule(code);
+    var result = makeModule(codeWithBOM);
+    assert(code.length === 22);
+    assert(codeWithBOM.length === 23);
     assert(result.code.length === 22);
   });
 
