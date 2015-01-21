@@ -54,6 +54,16 @@ describe("makeModule()", function () {
     assert(result.error === null);
   });
 
+  it("strips the BOM if present", function () {
+    var BOM = String.fromCharCode(0xFEFF);
+    var code = "module.exports = true;";
+    assert(code.length === 22);
+    var codeWithBOM = BOM + code;
+    assert(code.length === 23);
+    var result = makeModule(code);
+    assert(result.code.length === 22);
+  });
+
   it("returns an error property with the error object if compile failed", function () {
     var badCode = "module.exports = {a: 1 b: 1};";
     var result1 = makeModule(badCode);
