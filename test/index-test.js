@@ -41,7 +41,7 @@ describe("makeModule()", function () {
     assert((result instanceof Module) === true);
   });
 
-  it("has the expected properties and values", function () {
+  it("has the expected properties and values when providing a location", function () {
 
     var result = makeModule(code, "./example/calc");
 
@@ -70,6 +70,38 @@ describe("makeModule()", function () {
     assert(result.hasOwnProperty("error"));
     assert(result.error === null);
   });
+
+it("has the expected properties and values when not providing a location", function () {
+
+  var theCode = "module.exports = {name: 'Joe', age: 30};";
+
+  var result = makeModule(theCode);
+
+  assert(result.hasOwnProperty("exports"));
+  assert.equal(result.exports.name, "Joe");
+  assert.equal(result.exports.age, 30);
+
+  assert(result.hasOwnProperty("id"));
+  assert.equal(result.id, __dirname);
+
+  assert(result.hasOwnProperty("parent"));
+  assert(result.parent.id, __dirname);
+  
+  assert(result.hasOwnProperty("filename"));
+  assert.equal(result.filename, __dirname);
+
+  assert(result.hasOwnProperty("loaded"));
+  assert(result.loaded === true);
+  
+  assert(result.hasOwnProperty("children"));
+  assert.deepEqual(result.children, []);
+  
+  assert(result.hasOwnProperty("paths"));
+  assert(Array.isArray(result.paths));
+  
+  assert(result.hasOwnProperty("error"));
+  assert(result.error === null);
+});
 
   it("strips the BOM if present", function () {
     var BOM = String.fromCharCode(0xFEFF);
