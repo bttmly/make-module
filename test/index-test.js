@@ -2,7 +2,7 @@ var path = require("path");
 var fs = require("fs");
 var assert = require("assert");
 
-var makeModule = require("..");
+var makeModule = require("../lib/index.js");
 
 function joinHere (where) {
   return path.join(__dirname, where);
@@ -41,22 +41,31 @@ describe("makeModule()", function () {
     assert((result instanceof Module) === true);
   });
 
-  it("has the expected properties", function () {
+  it("has the expected properties and values", function () {
+
     var result = makeModule(code, "./example/calc");
+
     assert(result.hasOwnProperty("exports"));
-    
+    assert(result.exports.hasOwnProperty("add"));
+    assert(result.exports.hasOwnProperty("subtract"));
+
     assert(result.hasOwnProperty("id"));
-    
+    assert.equal(result.id, path.join(__dirname, "..", "test/example/calc"));
+
     assert(result.hasOwnProperty("parent"));
+    assert(result.parent.id, path.join(__dirname, "..", "lib/index.js"));
     
     assert(result.hasOwnProperty("filename"));
+    assert.equal(result.filename, path.join(__dirname, "..", "test/example/calc"));
 
     assert(result.hasOwnProperty("loaded"));
     assert(result.loaded === true);
     
     assert(result.hasOwnProperty("children"));
+    assert.deepEqual(result.children, []);
     
     assert(result.hasOwnProperty("paths"));
+    assert(Array.isArray(result.paths));
     
     assert(result.hasOwnProperty("error"));
     assert(result.error === null);
