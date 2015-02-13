@@ -8,7 +8,9 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha ./test/index-test.js"
+    "test": "mocha ./test/index-test.js",
+    "cover": "node --harmony ./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- ./test/index-test.js -R spec",
+    "codecovio": "npm run cover; cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js --verbose"
   },
   "keywords": [
     "module",
@@ -20,6 +22,8 @@
   "license": "MIT",
   "devDependencies": {
     "chai": "^1.10.0",
+    "codecov.io": "0.0.8",
+    "istanbul": "^0.3.5",
     "mocha": "^2.1.0"
   },
   "dependencies": {
