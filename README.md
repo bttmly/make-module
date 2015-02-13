@@ -1,4 +1,4 @@
-# make-module [![Build Status](https://travis-ci.org/nickb1080/make-module.svg?branch=master)](https://travis-ci.org/nickb1080/make-module)
+# make-module [![Build Status](https://travis-ci.org/nickb1080/make-module.svg?branch=master)](https://travis-ci.org/nickb1080/make-module) [![codecov.io](https://codecov.io/github/nickb1080/make-module/coverage.svg?branch=master)](https://codecov.io/github/nickb1080/make-module?branch=master)
 
 Create a node module from a string of code, and maybe a file name.
 
