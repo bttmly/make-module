@@ -38,7 +38,7 @@ describe("makeModule()", function () {
   it("returns instances of the node core `Module` constructor", function () {
     var Module = require("module");
     var result = makeModule("");
-    assert((result instanceof Module) === true);
+    assert(result instanceof Module);
   });
 
   it("has the expected properties and values when providing a location", function () {
@@ -85,7 +85,7 @@ it("has the expected properties and values when not providing a location", funct
   assert.equal(result.id, __dirname);
 
   assert(result.hasOwnProperty("parent"));
-  assert(result.parent.id, __dirname);
+  assert.equal(result.parent.id, path.join(__dirname, "../lib/index.js"));
   
   assert(result.hasOwnProperty("filename"));
   assert.equal(result.filename, __dirname);
@@ -100,7 +100,7 @@ it("has the expected properties and values when not providing a location", funct
   assert(Array.isArray(result.paths));
   
   assert(result.hasOwnProperty("error"));
-  assert(result.error === null);
+  assert.equal(result.error, null);
 });
 
   it("strips the BOM if present", function () {
@@ -108,23 +108,23 @@ it("has the expected properties and values when not providing a location", funct
     var code = "module.exports = true;";
     var codeWithBOM = BOM + code;
     var result = makeModule(codeWithBOM);
-    assert(code.length === 22);
-    assert(codeWithBOM.length === 23);
-    assert(result.code.length === 22);
+    assert.equal(result.code.indexOf(BOM), -1);
   });
 
   it("returns an error property with the error object if compile failed", function () {
+    // missing a comma between object properties (errors at parse time)
     var badCode = "module.exports = {a: 1 b: 1};";
     var result1 = makeModule(badCode);
     assert(/unexpected identifier/i.test(result1.error.message) === true);
 
+    // no module at that location
     var badRequire = "require('./asdf')";
     var result2 = makeModule(badRequire);
     assert(/cannot find module/i.test(result2.error.message) === true);
 
-    var wontCompile = fs.readFileSync(joinHere("./example/wont-compile.js")).toString();
-    var result3 = makeModule(wontCompile);
-    assert(/cannot set property '66' of undefined/i.test(result3.error.message) === true);
+    // throws an exception during execution
+    var result3 = makeModule("throw new Error('Kaboom!')");
+    assert(result3.error.message === "Kaboom!");
   });
 
   it("sets .exports to `null` if compile failed", function () {
@@ -136,8 +136,7 @@ it("has the expected properties and values when not providing a location", funct
     var result2 = makeModule(badRequire);
     assert(result2.exports === null);
 
-    var wontCompile = fs.readFileSync(joinHere("./example/wont-compile.js")).toString();
-    var result3 = makeModule(wontCompile);
+    var result3 = makeModule("throw new Error('Kaboom!')");
     assert(result3.exports === null);
   });
 
