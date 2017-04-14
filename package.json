@@ -2,7 +2,7 @@
   "name": "make-module",
   "version": "3.0.0",
   "description": "create a module from a string of code",
-  "repository": "git@github.com:nickb1080/make-module.git",
+  "repository": "git@github.com:bttmly/make-module.git",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -18,7 +18,7 @@
     "require",
     "exports"
   ],
-  "author": "Nick Bottomley (github.com/nickb1080)",
+  "author": "Nick Bottomley (github.com/bttmly)",
   "license": "MIT",
   "devDependencies": {
     "chai": "^1.10.0",
